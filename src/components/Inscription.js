@@ -83,7 +83,7 @@ const Inscription = () => {
         <div className="jumbotron d-flex align-items-center min-vh-100">
           <div className="container text-center">
             <Spinner animation="border" role="status" className='mb-3'>
-              <span className="visually-hidden">Loading...</span>
+              <span className="visually-hidden">Chargement en cours...</span>
             </Spinner>
             <h4>Chargement en cours...</h4>
           </div>
@@ -123,7 +123,7 @@ const Inscription = () => {
                     }
 
                     { field.type !== "dropdown" && !field.options &&
-                      <Form.Control aria-describedby="inputGroupPrepend" type={ field.type } name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`} required />
+                      <Form.Control type={ field.type } name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`} required />
                     }
                     <Form.Control.Feedback type="invalid">{ field.label } est vide</Form.Control.Feedback>
 
