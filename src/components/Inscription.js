@@ -78,7 +78,7 @@ const Inscription = () => {
   }
 
   return (
-    <Container>
+    <Container className='container'>
       { isLoading &&
         <div>
           loading
@@ -93,13 +93,13 @@ const Inscription = () => {
 
       { !isLoading && !isError &&
         <Form noValidate validated={validated} onSubmit={ submitForm }>
-          <Card className="my-3 mx-5">
+          <Card className="my-3 mx-auto" style={{ width: '45rem' }}>
             <Card.Header className="text-center">
               <h4> Formulaire d'inscription </h4>
             </Card.Header>
 
             { questions && questions.map((question, questionIndex) => (
-              <Card.Body key={ `question-${questionIndex}` }>
+              <Card.Body key={ `question-${questionIndex}` } className='px-5'>
                 <Card.Title className="mb-3">{ question.title }</Card.Title>
 
                 { question.fields && question.fields.map((field, fieldIndex) => (
@@ -125,7 +125,7 @@ const Inscription = () => {
               </Card.Body>
             )) }
 
-            <Card.Body>
+            <Card.Body className='px-5'>
               <Button variant="primary" type='submit'>Envoyer</Button>
             </Card.Body>
           </Card>
