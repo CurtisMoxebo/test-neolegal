@@ -1,5 +1,5 @@
 import questionsFile from '../data/questions';
-import { Container, Card, Form, Button } from 'react-bootstrap';
+import { Container, Card, Form, Button, Spinner } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const Inscription = () => {
         setIsLoading(false);
         setIsError(true);
       }
-    }, 1000);
+    }, 1500);
   }, [])
 
   const onInputChange = (e, index, name) => {
@@ -80,14 +80,21 @@ const Inscription = () => {
   return (
     <Container className='container'>
       { isLoading &&
-        <div>
-          loading
+        <div className="jumbotron d-flex align-items-center min-vh-100">
+          <div className="container text-center">
+            <Spinner animation="border" role="status" className='mb-3'>
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            <h4>Chargement en cours...</h4>
+          </div>
         </div>
       }
 
       { isError &&
-        <div>
-          Error
+        <div className="jumbotron d-flex align-items-center min-vh-100">
+          <div className="container text-center">
+            <h2>Une erreur c'est produite</h2>
+          </div>
         </div>
       }
 
