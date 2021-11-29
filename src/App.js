@@ -1,14 +1,15 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Inscription from './components/Inscription';
 import Merci from './components/Merci';
 import Error from './components/Error';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route exact path='/'>
-          <Inscription />
+          <Redirect to='/inscription' />
         </Route>
 
         <Route exact path='/inscription'>
