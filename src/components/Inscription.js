@@ -8,6 +8,7 @@ const Inscription = () => {
   const [isError, setIsError] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [validated, setValidated] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -50,22 +51,30 @@ const Inscription = () => {
   // Submit data
   const submitForm = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    const formResult = answeredQuestions.reduce((r, c) => Object.assign(r, c), {});
+    const form = e.currentTarget;
 
-    fetch('https://enovode7uq1r.x.pipedream.net/', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formResult)
-    }).then((res) => {
-      if (res.status === 200) {
-        history.push(`/merci/${ formResult.first_name ? formResult.first_name : '' }`)
-      }
-    }).catch((error) => {
-      console.log(error)
-      setIsLoading(false);
-      setIsError(true);
-    })
+    if (!form.checkValidity()) {
+      setValidated(true);
+    }
+
+    else {
+      setIsLoading(true);
+      const formResult = answeredQuestions.reduce((r, c) => Object.assign(r, c), {});
+
+      fetch('https://enovode7uq1r.x.pipedream.net/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formResult)
+      }).then((res) => {
+        if (res.status === 200) {
+          history.push(`/merci/${ formResult.first_name ? formResult.first_name : '' }`)
+        }
+      }).catch((error) => {
+        console.log(error)
+        setIsLoading(false);
+        setIsError(true);
+      })
+    }
   }
 
   return (
@@ -83,7 +92,7 @@ const Inscription = () => {
       }
 
       { !isLoading && !isError &&
-        <Form onSubmit={ submitForm }>
+        <Form noValidate validated={validated} onSubmit={ submitForm }>
           <Card className="my-3 mx-5">
             <Card.Header className="text-center">
               <h4> Formulaire d'inscription </h4>
@@ -98,7 +107,8 @@ const Inscription = () => {
                     <Form.Label>{ field.label }</Form.Label>
 
                     { field.type === "dropdown" && field.options && field.options.length > 0 &&
-                      <Form.Select name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`}>
+                      <Form.Select name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`} required>
+                        <option></option>
                         { field.options.map((option, optionIndex) => (
                           <option key={ `option-${optionIndex}` }>{ option.label }</option>
                         )) }
@@ -106,11 +116,9 @@ const Inscription = () => {
                     }
 
                     { field.type !== "dropdown" && !field.options &&
-                      <Form.Control type={ field.type } name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`} />
+                      <Form.Control aria-describedby="inputGroupPrepend" type={ field.type } name={ field.name } value={ answeredQuestions[questionIndex][`${field.name}`] } onChange={ (e) => onInputChange(e, questionIndex, field.name) } placeholder={`Entrez ${field.label.toLowerCase()}`} required />
                     }
-                    <Form.Control.Feedback type="invalid">
-                    bad
-                  </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{ field.label } est vide</Form.Control.Feedback>
 
                   </Form.Group>
                 )) }
