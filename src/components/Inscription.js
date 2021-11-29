@@ -1,12 +1,14 @@
 import questionsFile from '../data/questions';
 import { Container, Card, Form, Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Inscription = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     // simulate getting data
@@ -49,14 +51,16 @@ const Inscription = () => {
   const submitForm = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    const formResult = answeredQuestions.reduce((r, c) => Object.assign(r, c), {});
 
     fetch('https://enovode7uq1r.x.pipedream.net/', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(answeredQuestions.reduce((r, c) => Object.assign(r, c), {}))
+      body: JSON.stringify(formResult)
     }).then((res) => {
-      console.log(res);
-      setIsLoading(false);
+      if (res.status === 200) {
+        history.push(`/merci/${ formResult.first_name ? formResult.first_name : '' }`)
+      }
     }).catch((error) => {
       console.log(error)
       setIsLoading(false);
