@@ -67,6 +67,9 @@ const Inscription = () => {
         body: JSON.stringify(formResult)
       }).then((res) => {
         if (res.status === 200) {
+          let storageArray = localStorage.getItem('answeredQuestions') ? JSON.parse(localStorage.getItem('answeredQuestions')) : [];
+          storageArray.push(formResult);
+          localStorage.setItem('answeredQuestions', JSON.stringify(storageArray));
           history.push(`/merci/${ formResult.first_name ? formResult.first_name : '' }`)
         }
       }).catch((error) => {
